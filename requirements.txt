@@ -1,0 +1,6 @@
+pandas
+sklearn.preprocessing
+manipulating_data
+scikit-learn
+scipy
+numpy
