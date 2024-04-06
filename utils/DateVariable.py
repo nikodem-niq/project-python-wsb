@@ -41,26 +41,20 @@ class DateVariable() :
             The parsed date as a Timestamp object.
         """
 
-        timestamp = pd.to_datetime(string_date)
+        timestamp = pd.to_datetime(string_date, dayfirst=True)
 
         formatted_date = timestamp.strftime('%Y-%m-%d')
 
         return pd.Timestamp(formatted_date)
     
     def encode_as_number(self) -> pd.Series:
-        """
-        Encodes the date as a number, where each day is represented by a unique number.
+        if self.column.dtype != 'datetime64[ns]':
+            self.column = self.column.apply(DateVariable.parse_string_date)
 
-        Returns
-        -------
-        pd.Series
-            A pandas Series with the date encoded as a number.
-        """
+        year = self.column.dt.year
+        month = self.column.dt.month
+        day = self.column.dt.day
 
-        # Ensure self.column is in datetime format
-        self.column = pd.to_datetime(self.column, dayfirst=True) 
+        encoded_column = year * 365 + (month - 1) * 30 + day
 
-        # Convert the date to days since 1970-01-01
-        days_since_epoch = (self.column - pd.Timestamp('1970-01-01')).dt.days
-
-        return days_since_epoch
+        return encoded_column

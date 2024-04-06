@@ -17,7 +17,6 @@ class NumericVariable() :
         Detects outliers using the interquartile range method.
     """
 
-    # popraw proszę konstruktor zgodnie z pkt 1 polecenia
     def __init__(self, column: pd.Series):
 
         """
@@ -45,18 +44,14 @@ class NumericVariable() :
             A list of indices of the outliers in the given column.
         """
 
-        # a) Obliczanie kwartyli
         q1 = np.percentile(self.column, 25)
         q3 = np.percentile(self.column, 75)
 
-        # b) Obliczanie IQR
         iqr = q3 - q1
 
-        # c) Określenie granic
         lower_bound = q1 - 1.5 * iqr
         upper_bound = q3 + 1.5 * iqr
 
-        # d) Identyfikacja i zwracanie indeksów odstających obserwacji
         outliers_indices = []
         for i in range(len(self.column)):
             if self.column[i] < lower_bound or self.column[i] > upper_bound:
